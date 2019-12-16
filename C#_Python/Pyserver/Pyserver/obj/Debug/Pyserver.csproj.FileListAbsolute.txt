@@ -1,0 +1,6 @@
+C:\Users\charp\Documents\CSharp\Pyserver\Pyserver\bin\Debug\Pyserver.exe.config
+C:\Users\charp\Documents\CSharp\Pyserver\Pyserver\bin\Debug\Pyserver.exe
+C:\Users\charp\Documents\CSharp\Pyserver\Pyserver\bin\Debug\Pyserver.pdb
+C:\Users\charp\Documents\CSharp\Pyserver\Pyserver\obj\Debug\Pyserver.csprojAssemblyReference.cache
+C:\Users\charp\Documents\CSharp\Pyserver\Pyserver\obj\Debug\Pyserver.exe
+C:\Users\charp\Documents\CSharp\Pyserver\Pyserver\obj\Debug\Pyserver.pdb
