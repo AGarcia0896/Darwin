@@ -5,6 +5,8 @@ import pickle
 import struct
 from io import BytesIO
 
+
+# Definición de la conexión
 HOST=''
 PORT=8485
 
@@ -25,38 +27,37 @@ depth_scale = conn.recv(4096)
 depth_scale = struct.unpack('!d', depth_scale)[0]
 print("Depth Scale is: ", depth_scale)
 
+
+# Lectura de Datos
 try:
     while True:
 
+        # Cabecera
         while len(data) < payload_size:
             data += conn.recv(4096)
         
         packed_msg_size = data[:payload_size]
         data = data[payload_size:]
         msg_size = struct.unpack(">L", packed_msg_size)[0]
+
+        # Mensaje
         while len(data) < msg_size:
             data += conn.recv(4096)
         frame_data = data[:msg_size]
         data = data[msg_size:]
 
-        frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
+        # Decodificado
+        depth_image = pickle.loads(frame_data, fix_imports=True, encoding="bytes")
 
-        depth_image = frame[0]
-        color_image = frame[1]
-        clipping_distance = frame[2]
-
+        # Descompresión
         f = BytesIO(depth_image)
         loaded = np.load(f)
         depth_image = loaded['depth_image']
 
-        grey_color = 153
-        depth_image_3d = np.dstack((depth_image,depth_image,depth_image))
-        bg_removed = np.where((depth_image_3d > clipping_distance) | (depth_image_3d <= 0), grey_color, color_image)
-
+        # Mapa de color
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
-        images = np.hstack((bg_removed, depth_colormap))
         cv2.namedWindow('Align Example 1', cv2.WINDOW_AUTOSIZE)
-        cv2.imshow('Align Example 1', images)
+        cv2.imshow('Align Example 1', depth_colormap)
 
 
         key = cv2.waitKey(1)
