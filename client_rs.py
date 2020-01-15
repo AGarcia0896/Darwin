@@ -7,7 +7,8 @@ from io import BytesIO
 
 # Conexión al servidor
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('10.104.100.83', 8485))
+#client_socket.connect(('10.104.100.83', 8485))
+client_socket.connect(('localhost', 8888))
 connection = client_socket.makefile('wb')
 
 # Conexión con la camara Real Sense
@@ -32,7 +33,7 @@ try:
         aligned_frames = align.process(frames)
 
         aligned_depth_frame = aligned_frames.get_depth_frame()
-        depth_image = np.asanyarray(aligned_depth_frame.get_data())     
+        depth_image = np.asanyarray(aligned_depth_frame.get_data())
 
         # Compresión
         f = BytesIO()
