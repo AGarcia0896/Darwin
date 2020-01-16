@@ -7,9 +7,9 @@ from io import BytesIO
 
 # Conexión al servidor
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#client_socket.connect(('10.104.100.83', 8485))
-client_socket.connect(('localhost', 8888))
-connection = client_socket.makefile('wb')
+# client_socket.connect(('10.104.100.83', 8485))
+client_socket.connect(("localhost", 8485))
+connection = client_socket.makefile("wb")
 
 # Conexión con la camara Real Sense
 pipeline = rs.pipeline()
@@ -21,7 +21,7 @@ profile = pipeline.start(config)
 
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
-client_socket.sendall(struct.pack('!d', depth_scale))
+client_socket.sendall(struct.pack("!d", depth_scale))
 
 align_to = rs.stream.color
 align = rs.align(align_to)
@@ -40,7 +40,7 @@ try:
         np.savez_compressed(f, depth_image=depth_image)
         f.seek(0)
         depth_image = f.read()
-        
+
         # Codificación
         data = pickle.dumps(depth_image, 0)
         size = len(data)
