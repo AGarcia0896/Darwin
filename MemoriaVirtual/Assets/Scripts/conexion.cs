@@ -7,27 +7,16 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-
 public class conexion : MonoBehaviour
 {
-    
-    bool running;
-    bool hijo;
-    bool conectado;
     public int connectionPort;
     public string connectionIP;
     IPAddress localAdd;
     TcpListener listener;
-    TcpClient client;
-    Thread mThread;
-    Thread process;
-    
+    Thread mThread;    
 
     private void Start()
     {
-        running = true;
-        hijo = false;
-        conectado = false;
         connectionIP = GetLocalIPAddress();
         connectionPort = 8888;
         ThreadStart ts = new ThreadStart(conexionServer);
@@ -50,69 +39,30 @@ public class conexion : MonoBehaviour
 
     void conexionServer()
     {
-        
         localAdd = IPAddress.Parse(connectionIP);
         listener = new TcpListener(IPAddress.Any, connectionPort);
         listener.Start();
-        
         while(true){
-            client = listener.AcceptTcpClient();
-            ThreadStart cl = new ThreadStart(comunicacion);
-            process = new Thread(cl);
-            process.Start();
+            listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallBack), this.listener);
+            System.Threading.Thread.Sleep(5000);
         }
-        //client = listener.AcceptTcpClient();
-        //comunicacion();
     }
 
-    void comunicacion(){
-        conectado = true;
-        hijo = true;
-        while (running)
-        {
-            Clientes();
-        }
-        client.Close();
-        conectado = client.Connected;
-    }
-
-    void Clientes()
-    {
-        NetworkStream nwStream = client.GetStream();
-        byte[] buffer = new byte[client.ReceiveBufferSize];
-        int bytesRead = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
-        string dataReceived = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-        Debug.Log(dataReceived);
-
-        if (dataReceived != null)
-        {
-            if (dataReceived == "stop")
-            {
-                running = false;
-            }
-            //else
-            //{
-                nwStream.Write(buffer, 0, bytesRead);
-            //}
-        }
-        else{
-            running = false;
-        }
+    protected void AcceptCallBack(IAsyncResult ar){
+        int ThreadId = Thread.CurrentThread.ManagedThreadId;
+        TcpListener listener = (TcpListener)ar.AsyncState;
+        TcpClient client = listener.EndAcceptTcpClient(ar);
+        Hilos_Clientes hc = new Hilos_Clientes(client);
+        Thread clientThread = new Thread(new ThreadStart(hc.Run));
+        clientThread.Start();
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
         {
-            client.Close();
             listener.Stop();
             Application.Quit();
-        }
-        if(hijo){
-            conectado = client.Connected;
-        }
-        if(!conectado && hijo){
-            process.Abort();
         }
     }
 }
