@@ -7,8 +7,8 @@ from io import BytesIO
 
 # Conexión al servidor
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# client_socket.connect(('10.104.100.83', 8485))
-client_socket.connect(("localhost", 8485))
+client_socket.connect(("10.104.104.50", 8888))
+# client_socket.connect(("localhost", 8485))
 connection = client_socket.makefile("wb")
 
 # Conexión con la camara Real Sense
@@ -45,7 +45,13 @@ try:
         data = pickle.dumps(depth_image, 0)
         size = len(data)
 
+        key = cv2.waitKey(1)
+
         client_socket.sendall(struct.pack(">L", size) + data)
+        if key & 0xFF == ord("q") or key == 27:
+            cv2.destroyAllWindows()
+            break
 
 finally:
     pipeline.stop()
+    s.close()
