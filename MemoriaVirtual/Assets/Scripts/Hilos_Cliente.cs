@@ -50,6 +50,7 @@ public class Hilos_Clientes{
         byte[] buffer = new byte[cliente.ReceiveBufferSize];
         int bytesRead = nwStream.Read(buffer, 0, cliente.ReceiveBufferSize);
         string dataReceived = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
         Debug.Log(dataReceived);
 
         if (dataReceived != null && dataReceived.Length != 0)
