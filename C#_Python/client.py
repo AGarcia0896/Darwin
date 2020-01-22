@@ -5,7 +5,7 @@ import pickle
 import time
 import cv2
 
-TCP_IP = '10.104.97.84'
+TCP_IP = '10.104.104.50'
 #TCP_IP = 'localhost'
 TCP_PORT = 8888
 MESSAGE = b'stop'

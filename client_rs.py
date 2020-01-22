@@ -4,6 +4,7 @@ import socket
 import struct
 import pickle
 from io import BytesIO
+import cv2
 
 # Conexión al servidor
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,10 +22,15 @@ profile = pipeline.start(config)
 
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
-client_socket.sendall(struct.pack("!d", depth_scale))
+#client_socket.sendall(struct.pack("!d", depth_scale))
+print(depth_scale)
+client_socket.sendall(str(depth_scale).encode())
 
 align_to = rs.stream.color
 align = rs.align(align_to)
+
+# cv2.namedWindow('Align Example 1',cv2.WINDOW_AUTOSIZE)
+# cv2.waitKey(1)
 
 # Obtención de los Frames
 try:
@@ -54,4 +60,4 @@ try:
 
 finally:
     pipeline.stop()
-    s.close()
+    client_socket.close()
