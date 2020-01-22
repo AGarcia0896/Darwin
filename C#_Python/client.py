@@ -5,14 +5,14 @@ import pickle
 import time
 import cv2
 
-TCP_IP = '10.104.97.84'
-#TCP_IP = 'localhost'
+TCP_IP = "10.104.98.146"
+# TCP_IP = 'localhost'
 TCP_PORT = 8888
-MESSAGE = b'stop'
-me = b'hola'
+MESSAGE = b"stop"
+me = b"hola"
 DATO = 0
 
-cv2.namedWindow('Align Example 1',cv2.WINDOW_AUTOSIZE)
+cv2.namedWindow("Align Example 1", cv2.WINDOW_AUTOSIZE)
 cv2.waitKey(1)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,10 +28,10 @@ while DATO < 500:
     print(s.recv(1024))
     DATO = DATO + 1
     time.sleep(3)
-    
+
     key = cv2.waitKey(1)
 
-    if key & 0xFF == ord('q') or key == 27:
+    if key & 0xFF == ord("q") or key == 27:
         cv2.destroyAllWindows()
         break
 s.close()
