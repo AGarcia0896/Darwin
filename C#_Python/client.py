@@ -5,8 +5,13 @@ import pickle
 import time
 import cv2
 
+<<<<<<< HEAD
 TCP_IP = "10.104.98.146"
 # TCP_IP = 'localhost'
+=======
+TCP_IP = '10.104.104.50'
+#TCP_IP = 'localhost'
+>>>>>>> de7f47639b57c7ed2732def1f152b994a91f0510
 TCP_PORT = 8888
 MESSAGE = b"stop"
 me = b"hola"
