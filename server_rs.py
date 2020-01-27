@@ -56,6 +56,25 @@ try:
 
         # Mapa de color
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+
+        #row,col = depth_image.shape
+        #text = ''
+        #for i in range(row):
+        #    for j in range(col):
+        #        text += '({}) '.format(depth_image[i][j])
+        #    text += '\n'
+
+        # Write the string to a file.
+        #with open('depth_image.txt', 'w') as f:
+        #    f.write(text)
+
+        #cv2.imwrite('depth_image.jpg',depth_image)
+
+        #cv2.waitKey()
+
+        cv2.namedWindow('Depth Image', cv2.WINDOW_AUTOSIZE)
+        cv2.imshow('Depth Image', depth_image)
+
         cv2.namedWindow('Align Example 1', cv2.WINDOW_AUTOSIZE)
         cv2.imshow('Align Example 1', depth_colormap)
 
