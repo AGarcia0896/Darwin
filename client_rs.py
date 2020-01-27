@@ -22,24 +22,15 @@ profile = pipeline.start(config)
 
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
-<<<<<<< HEAD
 # client_socket.sendall(struct.pack("!d", depth_scale))
-=======
-#client_socket.sendall(struct.pack("!d", depth_scale))
->>>>>>> de7f47639b57c7ed2732def1f152b994a91f0510
 print(depth_scale)
 client_socket.sendall(str(depth_scale).encode())
 
 align_to = rs.stream.color
 align = rs.align(align_to)
 
-<<<<<<< HEAD
-cv2.namedWindow("Align Example 1", cv2.WINDOW_AUTOSIZE)
-cv2.waitKey(1)
-=======
 # cv2.namedWindow('Align Example 1',cv2.WINDOW_AUTOSIZE)
 # cv2.waitKey(1)
->>>>>>> de7f47639b57c7ed2732def1f152b994a91f0510
 
 # Obtención de los Frames
 try:
