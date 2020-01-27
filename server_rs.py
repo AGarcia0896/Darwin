@@ -8,7 +8,7 @@ from io import BytesIO
 
 # Definición de la conexión
 HOST=''
-PORT=8485
+PORT=8888
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 print('Socket created')
