@@ -1,7 +1,11 @@
 # Read the image file.
 import imageio
 import cv2 as cv
+import numpy as np
 data = imageio.imread('depth_colormap.jpg')
+data = cv.imread('depth_colormap.jpg')
+#print(data(:,:,0))
+#print(data.shape)
 
 for i in range(3):
     cv.imshow("Channel {}" .format(i), data[:,:,i])
@@ -13,7 +17,7 @@ for i in range(3):
     for row in data:
         for e in row:
             #text += '({}, {}, {}) '.format(e[0], e[1], e[2])
-            text += '({}) '.format(e[i])
+            text += '{} '.format(e[i])
         text += '\n'
 
     # Write the string to a file.
