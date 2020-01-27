@@ -16,8 +16,9 @@ import json
 
 # Conexión al servidor
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('10.104.98.116', 8888))
-connection = client_socket.makefile('wb')
+client_socket.connect(("10.104.98.184", 8888))
+# client_socket.connect(("localhost", 8485))
+connection = client_socket.makefile("wb")
 
 # Conexión con la camara Real Sense
 pipeline = rs.pipeline()
@@ -64,23 +65,24 @@ try:
         #data = pickle.dumps(depth_image, 0)
         # size = len(data)
 
-<<<<<<< HEAD
-        #client_socket.sendall(struct.pack(">L", size) + data)
-=======
         # client_socket.sendall(struct.pack(">L", size) + data)
         # client_socket.sendall(data)
         
         # data = json.dumps({'frame' : text}, cls=NumpyEncoder)
         data = '{"frame" : "' + text + '"}'
-        print(data)
+        size = len(data)
         #json_dump = json.dumps(data)
+        client_socket.sendall(str(size).encode())
         client_socket.sendall(data.encode())
+        print(data)
         
         key = cv2.waitKey(1)
         if key & 0xFF == ord("q") or key == 27:
             cv2.destroyAllWindows()
             break
->>>>>>> b3a2e423e2ba58c9029d173be540237104f32245
+
+except socket.error as exc:
+    print("Ocurrió una excepción socket.error : {}".format(exc))
 
 finally:
     pipeline.stop()
