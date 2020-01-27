@@ -16,7 +16,7 @@ import json
 
 # Conexión al servidor
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(("10.104.98.231", 8888))
+client_socket.connect(("10.104.98.184", 8888))
 # client_socket.connect(("localhost", 8485))
 connection = client_socket.makefile("wb")
 
@@ -70,14 +70,19 @@ try:
         
         # data = json.dumps({'frame' : text}, cls=NumpyEncoder)
         data = '{"frame" : "' + text + '"}'
-        print(data)
+        size = len(data)
         #json_dump = json.dumps(data)
+        client_socket.sendall(str(size).encode())
         client_socket.sendall(data.encode())
+        print(data)
         
         key = cv2.waitKey(1)
         if key & 0xFF == ord("q") or key == 27:
             cv2.destroyAllWindows()
             break
+
+except socket.error as exc:
+    print("Ocurrió una excepción socket.error : {}".format(exc))
 
 finally:
     pipeline.stop()
