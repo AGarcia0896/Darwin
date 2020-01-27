@@ -5,10 +5,18 @@ import struct
 import pickle
 from io import BytesIO
 import cv2
+import json
+
+# #Creación de json
+# class NumpyEncoder(json.JSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, np.ndarray):
+#             return obj.tolist()
+#         return json.JSONEncoder.default(self, obj)
 
 # Conexión al servidor
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(("10.104.98.146", 8888))
+client_socket.connect(("10.104.98.231", 8888))
 # client_socket.connect(("localhost", 8485))
 connection = client_socket.makefile("wb")
 
@@ -41,19 +49,31 @@ try:
         aligned_depth_frame = aligned_frames.get_depth_frame()
         depth_image = np.asanyarray(aligned_depth_frame.get_data())
 
+        text = ''
+        for row in depth_image:
+            for e in row:
+                text += '{} '.format(e)
+            #break
+
         # Compresión
-        f = BytesIO()
-        np.savez_compressed(f, depth_image=depth_image)
-        f.seek(0)
-        depth_image = f.read()
+        # f = BytesIO()
+        # np.savez_compressed(f, depth_image=depth_image)
+        # f.seek(0)
+        # depth_image = f.read()
 
         # Codificación
-        data = pickle.dumps(depth_image, 0)
+        #data = pickle.dumps(depth_image, 0)
         # size = len(data)
 
         # client_socket.sendall(struct.pack(">L", size) + data)
-        client_socket.sendall(data)
-
+        # client_socket.sendall(data)
+        
+        # data = json.dumps({'frame' : text}, cls=NumpyEncoder)
+        data = '{"frame" : "' + text + '"}'
+        print(data)
+        #json_dump = json.dumps(data)
+        client_socket.sendall(data.encode())
+        
         key = cv2.waitKey(1)
         if key & 0xFF == ord("q") or key == 27:
             cv2.destroyAllWindows()
