@@ -6,6 +6,7 @@ import pickle
 from io import BytesIO
 import cv2
 import json
+import keyboard
 
 # #Creación de json
 # class NumpyEncoder(json.JSONEncoder):
@@ -74,16 +75,18 @@ try:
         #json_dump = json.dumps(data)
         client_socket.sendall(str(size).encode())
         client_socket.sendall(data.encode())
-        print(data)
+        #print(data)
+        client_socket.recv(1024)
         
-        key = cv2.waitKey(1)
-        if key & 0xFF == ord("q") or key == 27:
-            cv2.destroyAllWindows()
-            break
+        if keyboard.is_pressed('q'):  # if key 'q' is pressed 
+            print('You Pressed A Key!')
+            break  # finishing the loop
 
 except socket.error as exc:
     print("Ocurrió una excepción socket.error : {}".format(exc))
 
 finally:
+    data = "stop"
+    client_socket.sendall(data.encode())
     pipeline.stop()
     client_socket.close()
